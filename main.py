@@ -1,7 +1,6 @@
 import pygame
 from constants import *
-from circleshape import *
-from player import *
+from player import Player
 
 def main():
     pygame.init()
@@ -15,6 +14,7 @@ def main():
             if event.type == pygame.QUIT:
                 return
             
+        player.update(dt)
         screen.fill("black")
         player.draw(screen)
         pygame.display.flip()
