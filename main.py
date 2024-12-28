@@ -8,8 +8,7 @@ from shot import Shot
 from score import Score
 
 '''
--- track high scores
--- display time
+-- track longest time separately from highcore?
 -- make player hitbox triangular
 '''
 user = ""
@@ -42,9 +41,10 @@ def save_highscores():
     with open("highscores.json", "w") as file:
         json.dump(highscores, file)
 
-def game_over(score):
+def game_over(score, time):
     print("Game over!")
     print(f"You scored: {int(score)}")
+    print(f"You lasted: {time}")
     check_highscores(score)
     
 
@@ -78,7 +78,7 @@ def main():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_over(int(score.value))
+                game_over(int(score.value), score.get_time())
                 return
         
         for _ in updateable:
@@ -87,7 +87,7 @@ def main():
 
         for asteroid in asteroids:
             if asteroid.collide(player):
-                game_over(int(score.value))
+                game_over(int(score.value), score.get_time())
                 return
             
             for shot in shots:
