@@ -4,13 +4,23 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from score import Score
+
+'''
+-- add scoring:
+-- small asteroids are worth 5pts, med asteroids worth 3pts, large asteroids worth 1pt
+-- increment 1 point for every second survived
+-- display time
+-- display score
+-- make player hitbox triangular
+'''
 
 def main():
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     dt = 0
-
+    
     updateable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
@@ -20,10 +30,11 @@ def main():
     Asteroid.containers = (asteroids, updateable, drawable)
     AsteroidField.containers = (updateable)
     Shot.containers = (shots, updateable, drawable)
+    
 
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    asteroid_field = AsteroidField()   
-
+    asteroid_field = AsteroidField()
+    score = Score()
 
     while True:
         for event in pygame.event.get():
@@ -34,18 +45,22 @@ def main():
             _.update(dt)
 
 
-
         for asteroid in asteroids:
             if asteroid.collide(player):
                 print("Game over!")
+                print(f"You scored: {int(score.value)}")
                 return
             
             for shot in shots:
                 if asteroid.collide(shot):
                     asteroid.split()
                     shot.kill()
+                    score.increase(asteroid.radius)
 
         screen.fill("black")
+
+        score.update(dt)
+        score.draw(screen)
 
         for _ in drawable:
             _.draw(screen)
