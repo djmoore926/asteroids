@@ -21,3 +21,5 @@ class Score():
     def draw(self, screen):
         score_text = self.font.render(f"Score:  {int(self.value)}", True, WHITE)
         screen.blit(score_text, (585, 10))  # Draw text at the top-left corner
+
+        
